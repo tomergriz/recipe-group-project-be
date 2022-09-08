@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db";
+import { errorHandler, notFound } from "./middleware/errorMiddleware";
 
 dotenv.config();
 connectDB();
@@ -19,8 +20,8 @@ app.get("/", (req: Request, res: Response): void => {
 
 // app.use('/user', userRoute);
 
-// app.use(notFound);
-// app.use(errorHandler);
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
