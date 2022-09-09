@@ -3,7 +3,7 @@ import { User } from "../models/userModel";
 import { NextFunction, Request, Response } from "express";
 import connectDB from "../config/db";
 import jwt from "jsonwebtoken";
-import { UserSignUpController } from "../types/types";
+import { UserLoginController, UserSignUpController } from "../types/types";
 
 dotenv.config();
 connectDB();
@@ -35,4 +35,28 @@ const signUpUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { signUpUser };
+const login = (req: Request, res: Response) => {
+  try {
+    const { _id, isAdmin }: UserLoginController = req.body.user;
+    const token = jwt.sign(
+      { id: _id, isAdmin: isAdmin },
+      process.env.TOKEN_SECRET as string,
+      {
+        expiresIn: "1d",
+      }
+    );
+    res.cookie("token", token, {
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    });
+
+    res.send({
+      ok: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { signUpUser, login };

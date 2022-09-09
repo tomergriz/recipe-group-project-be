@@ -1,3 +1,13 @@
+interface UserModel {
+  email: string;
+  password: string;
+  fname: string;
+  lname: string;
+  savedRecipes: Array<Object>;
+  userRecipes: Array<Object>;
+  isAdmin: boolean;
+}
+
 interface UserSignUpController {
   email: string;
   password: string;
@@ -9,14 +19,14 @@ interface UserSignUp extends UserSignUpController {
   repassword: string;
   isAdmin?: boolean;
 }
-
-interface UserModel {
+interface UserLogin {
   email: string;
   password: string;
-  fname: string;
-  lname: string;
-  savedRecipes: Array<Object>;
-  userRecipes: Array<Object>;
+  isAdmin?: boolean;
+}
+
+interface UserLoginController {
+  _id: string;
   isAdmin: boolean;
 }
 
@@ -39,4 +49,6 @@ export type {
   PwdMiddleware,
   PwdRepwdMiddleware,
   emailMiddlware,
+  UserLogin,
+  UserLoginController,
 };
