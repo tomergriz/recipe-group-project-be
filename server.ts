@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db";
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
+import userRoute from "./routes/userRoute";
 
 dotenv.config();
 connectDB();
@@ -18,7 +19,7 @@ app.get("/", (req: Request, res: Response): void => {
   res.send("API is running...");
 });
 
-// app.use('/user', userRoute);
+app.use("/user", userRoute);
 
 app.use(notFound);
 app.use(errorHandler);
