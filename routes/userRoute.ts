@@ -1,12 +1,14 @@
 import { Router } from "express";
-import { signUpUser } from "../controllers/userController";
+import { login, signUpUser } from "../controllers/userController";
 import {
   hashPwd,
+  isExistingUser,
   isNewUser,
   passwordsMatch,
+  verifyPwd,
 } from "../middleware/userMiddleware";
 import validateBody from "../middleware/validateBody";
-import { signUpSchema } from "../schemas/allSchemas";
+import { loginSchema, signUpSchema } from "../schemas/allSchemas";
 
 const router = Router();
 
@@ -17,6 +19,14 @@ router.post(
   hashPwd,
   isNewUser,
   signUpUser
+);
+
+router.post(
+  "/login",
+  validateBody(loginSchema),
+  isExistingUser,
+  verifyPwd,
+  login
 );
 
 export default router;
