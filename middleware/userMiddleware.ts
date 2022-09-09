@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { User } from "../models/userModel";
 import {
   emailMiddlware,
@@ -73,4 +74,31 @@ const verifyPwd = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export { passwordsMatch, hashPwd, isNewUser, isExistingUser, verifyPwd };
+const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
+  const { token }: { token: string } = req.cookies;
+  if (!token) {
+    res.status(401).send("Token Required");
+    return;
+  }
+  jwt.verify(
+    token,
+    process.env.TOKEN_SECRET as string,
+    (err: unknown, decoded: any) => {
+      if (err instanceof Error) {
+        res.status(401).send("Invalid Token");
+        return;
+      }
+      req.body.userId = decoded.id;
+      next();
+    }
+  );
+};
+
+export {
+  passwordsMatch,
+  hashPwd,
+  isNewUser,
+  isExistingUser,
+  verifyPwd,
+  verifyToken,
+};

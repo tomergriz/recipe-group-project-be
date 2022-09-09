@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { login, signUpUser } from "../controllers/userController";
+import { getUser, login, signUpUser } from "../controllers/userController";
 import {
   hashPwd,
   isExistingUser,
   isNewUser,
   passwordsMatch,
   verifyPwd,
+  verifyToken,
 } from "../middleware/userMiddleware";
 import validateBody from "../middleware/validateBody";
 import { loginSchema, signUpSchema } from "../schemas/allSchemas";
@@ -28,5 +29,7 @@ router.post(
   verifyPwd,
   login
 );
+
+router.get("/id", verifyToken, getUser);
 
 export default router;

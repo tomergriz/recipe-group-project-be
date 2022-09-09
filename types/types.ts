@@ -3,9 +3,19 @@ interface UserModel {
   password: string;
   fname: string;
   lname: string;
-  savedRecipes: Array<Object>;
-  userRecipes: Array<Object>;
+  savedRecipes: string[];
+  userRecipes: string[];
   isAdmin: boolean;
+}
+
+interface getUserController {
+  _id: string;
+  email: string;
+  fname: string;
+  lname: string;
+  isAdmin: boolean;
+  savedRecipes: string[];
+  userRecipes: string[];
 }
 
 interface UserSignUpController {
@@ -51,4 +61,5 @@ export type {
   emailMiddlware,
   UserLogin,
   UserLoginController,
+  getUserController,
 };
