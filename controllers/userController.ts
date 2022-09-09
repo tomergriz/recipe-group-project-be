@@ -3,7 +3,11 @@ import { User } from "../models/userModel";
 import { NextFunction, Request, Response } from "express";
 import connectDB from "../config/db";
 import jwt from "jsonwebtoken";
-import { UserLoginController, UserSignUpController } from "../types/types";
+import {
+  getUserController,
+  UserLoginController,
+  UserSignUpController,
+} from "../types/types";
 
 dotenv.config();
 connectDB();
@@ -39,7 +43,7 @@ const login = (req: Request, res: Response) => {
   try {
     const { _id, isAdmin }: UserLoginController = req.body.user;
     const token = jwt.sign(
-      { id: _id, isAdmin: isAdmin },
+      { id: _id?.toString(), isAdmin: isAdmin },
       process.env.TOKEN_SECRET as string,
       {
         expiresIn: "1d",
@@ -59,4 +63,26 @@ const login = (req: Request, res: Response) => {
   }
 };
 
-export { signUpUser, login };
+const getUser = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.body.userId, {
+      _id: 1,
+      email: 1,
+      fname: 1,
+      lname: 1,
+      isAdmin: 1,
+      savedRecipes: 1,
+      userRecipes: 1,
+    });
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: "User not found" });
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { signUpUser, login, getUser };
