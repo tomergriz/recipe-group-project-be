@@ -29,6 +29,11 @@ interface UserSignUp extends UserSignUpController {
   repassword: string;
   isAdmin?: boolean;
 }
+
+interface UserUpdateProfile extends UserSignUp {
+  userId: string;
+}
+
 interface UserLogin {
   email: string;
   password: string;
@@ -62,4 +67,5 @@ export type {
   UserLogin,
   UserLoginController,
   getUserController,
+  UserUpdateProfile,
 };

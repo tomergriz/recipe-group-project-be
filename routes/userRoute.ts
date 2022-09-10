@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { getUser, login, signUpUser } from "../controllers/userController";
+import {
+  getUser,
+  login,
+  signUpUser,
+  updateUserInfo,
+} from "../controllers/userController";
 import {
   hashPwd,
   isExistingUser,
@@ -31,5 +36,14 @@ router.post(
 );
 
 router.get("/id", verifyToken, getUser);
+router.put(
+  "/id",
+  validateBody(signUpSchema),
+  verifyToken,
+  passwordsMatch,
+  hashPwd,
+  isNewUser,
+  updateUserInfo
+);
 
 export default router;
