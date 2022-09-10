@@ -89,9 +89,20 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
         return;
       }
       req.body.userId = decoded.id;
+      req.body.isAdmin = decoded.isAdmin;
       next();
     }
   );
+};
+
+const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  const user = await User.findById(req.body.userId, { isAdmin: 1 });
+  if (user.isAdmin === true && req.body.isAdmin === true) {
+    req.body.user = user;
+    next();
+    return;
+  }
+  res.status(400).send("Only Admins can access this page.");
 };
 
 export {
@@ -101,4 +112,5 @@ export {
   isExistingUser,
   verifyPwd,
   verifyToken,
+  isAdmin,
 };
