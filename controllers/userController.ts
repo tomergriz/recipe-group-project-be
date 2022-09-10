@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import {
   getUserController,
   UserLoginController,
+  UserUpdateProfile,
   UserSignUpController,
 } from "../types/types";
 
@@ -85,4 +86,22 @@ const getUser = async (req: Request, res: Response) => {
   }
 };
 
-export { signUpUser, login, getUser };
+const updateUserInfo = async (req: Request, res: Response) => {
+  try {
+    const { userId, email, password, fname, lname }: UserUpdateProfile =
+      req.body;
+    const currentUser = await User.findById(userId);
+    if (email) currentUser.email = email;
+    if (password) currentUser.password = password;
+    if (fname) currentUser.fname = fname;
+    if (lname) currentUser.lname = lname;
+    await currentUser.save();
+    res.send({
+      ok: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { signUpUser, login, getUser, updateUserInfo };
