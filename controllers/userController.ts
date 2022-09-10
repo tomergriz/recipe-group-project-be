@@ -125,4 +125,37 @@ const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+// const getUserFull = async (req: Request, res: Response) => {
+//   try {
+//     const user = await User.findById(req.params.id, {
+//       email: 1,
+//       fname: 1,
+//       lname: 1,
+//       isAdmin: 1,
+//       savedRecipes: 1,
+//       userRecipes: 1,
+//     });
+//     const mySavedRecipes = await Recipes.find(
+//       {
+//         _id: { $in: user?.savedRecipes },
+//       },
+//       { _id: 1, recipeTitle: 1, description: 1, category: 1, picture: 1 }
+//     );
+//     const myuserRecipes = await Recipes.find(
+//       {
+//         _id: { $in: user?.adoptedPets },
+//       },
+//       { _id: 1, recipeTitle: 1, description: 1, category: 1, picture: 1 }
+//     );
+
+//     res.json({
+//       user: user,
+//       savedRecipes: mySavedRecipes,
+//       userRecipes: myuserRecipes,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
 export { signUpUser, login, getUser, updateUserInfo, getUsers };
