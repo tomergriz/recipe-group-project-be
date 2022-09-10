@@ -57,6 +57,19 @@ interface emailMiddlware {
   email: string;
 }
 
+interface IRecipe {
+  recipeTitle: string;
+  description: string;
+  category: string;
+  picture: string;
+  ingredients: string[];
+  directions: string[];
+  servings: number;
+  totalTime: number;
+  difficulty: string;
+  createdBy: string;
+}
+
 export type {
   UserSignUpController,
   UserSignUp,
@@ -68,4 +81,5 @@ export type {
   UserLoginController,
   getUserController,
   UserUpdateProfile,
+  IRecipe,
 };
