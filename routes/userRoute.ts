@@ -50,4 +50,6 @@ router.put(
 
 router.get("/", verifyToken, isAdmin, getUsers);
 
+// router.get("/:id/full", verifyToken, isAdmin, getUserFull);
+
 export default router;
