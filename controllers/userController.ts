@@ -104,4 +104,25 @@ const updateUserInfo = async (req: Request, res: Response) => {
   }
 };
 
-export { signUpUser, login, getUser, updateUserInfo };
+const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find(
+      {},
+      {
+        _id: 1,
+        email: 1,
+        fname: 1,
+        lname: 1,
+        isAdmin: 1,
+        savedRecipes: 1,
+        userRecipes: 1,
+      }
+    );
+
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { signUpUser, login, getUser, updateUserInfo, getUsers };

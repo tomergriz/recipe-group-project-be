@@ -1,12 +1,14 @@
 import { Router } from "express";
 import {
   getUser,
+  getUsers,
   login,
   signUpUser,
   updateUserInfo,
 } from "../controllers/userController";
 import {
   hashPwd,
+  isAdmin,
   isExistingUser,
   isNewUser,
   passwordsMatch,
@@ -45,5 +47,7 @@ router.put(
   isNewUser,
   updateUserInfo
 );
+
+router.get("/", verifyToken, isAdmin, getUsers);
 
 export default router;
