@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addRecipe } from "../controllers/recipeController";
+import { addRecipe, getRecipeById } from "../controllers/recipeController";
 import { upload, uploadToCloudinary } from "../middleware/imagesMiddleware";
 import { verifyToken } from "../middleware/userMiddleware";
 
@@ -12,5 +12,7 @@ router.post(
   uploadToCloudinary,
   addRecipe
 );
+
+router.get("/:id", getRecipeById);
 
 export default router;

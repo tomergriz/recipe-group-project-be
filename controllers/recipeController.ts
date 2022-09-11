@@ -38,4 +38,18 @@ const addRecipe = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { addRecipe };
+const getRecipeById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const recipe = await Recipes.findById(req.params.id);
+    if (recipe) {
+      res.json(recipe);
+    } else {
+      res.status(404).json({ message: "Recipe not found" });
+      throw new Error("Recipe not found");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { addRecipe, getRecipeById };
