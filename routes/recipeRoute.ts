@@ -6,6 +6,7 @@ import {
   editRecipe,
   getRecipeById,
   getSearchResults,
+  getUserRecipes,
 } from "../controllers/recipeController";
 import { upload, uploadToCloudinary } from "../middleware/imagesMiddleware";
 import {
@@ -42,5 +43,7 @@ router.get("/", isQueryValid, getSearchResults);
 router.post("/:id/save", verifyToken, isFavorited, addSavedRecipe);
 
 router.delete("/:id/save", verifyToken, isUnFavorited, deleteSavedRecipe);
+
+router.get("/user/:id", verifyToken, getUserRecipes);
 
 export default router;
