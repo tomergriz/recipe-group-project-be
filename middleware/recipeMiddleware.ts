@@ -12,4 +12,25 @@ const isMyRecipe = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { isMyRecipe };
+const isQueryValid = (req: Request, res: Response, next: NextFunction) => {
+  const searchObj = {};
+  if (req.query.recipeTitle) {
+    Object.assign(searchObj, {
+      type: { $regex: req.query.recipeTitle, $options: "i" },
+    });
+  }
+  if (req.query.category) {
+    if (req.query.category)
+      Object.assign(searchObj, { category: req.query.category });
+  }
+
+  if (req.query.difficulty) {
+    if (req.query.difficulty)
+      Object.assign(searchObj, { difficulty: req.query.difficulty });
+  }
+
+  req.query = searchObj;
+  next();
+};
+
+export { isMyRecipe, isQueryValid };

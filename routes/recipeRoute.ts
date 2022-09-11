@@ -3,9 +3,10 @@ import {
   addRecipe,
   editRecipe,
   getRecipeById,
+  getSearchResults,
 } from "../controllers/recipeController";
 import { upload, uploadToCloudinary } from "../middleware/imagesMiddleware";
-import { isMyRecipe } from "../middleware/recipeMiddleware";
+import { isMyRecipe, isQueryValid } from "../middleware/recipeMiddleware";
 import { verifyToken } from "../middleware/userMiddleware";
 
 const router = Router();
@@ -28,5 +29,7 @@ router.put(
   uploadToCloudinary,
   editRecipe
 );
+
+router.get("/", isQueryValid, getSearchResults);
 
 export default router;
