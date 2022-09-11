@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   addRecipe,
   addSavedRecipe,
+  deleteSavedRecipe,
   editRecipe,
   getRecipeById,
   getSearchResults,
@@ -11,6 +12,7 @@ import {
   isFavorited,
   isMyRecipe,
   isQueryValid,
+  isUnFavorited,
 } from "../middleware/recipeMiddleware";
 import { verifyToken } from "../middleware/userMiddleware";
 
@@ -38,5 +40,7 @@ router.put(
 router.get("/", isQueryValid, getSearchResults);
 
 router.post("/:id/save", verifyToken, isFavorited, addSavedRecipe);
+
+router.delete("/:id/save", verifyToken, isUnFavorited, deleteSavedRecipe);
 
 export default router;
