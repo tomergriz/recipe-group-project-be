@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Recipes from "../models/recipeModel";
+import { User } from "../models/userModel";
 
 const isMyRecipe = async (req: Request, res: Response, next: NextFunction) => {
   const { userId } = req.body;
@@ -33,4 +34,21 @@ const isQueryValid = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export { isMyRecipe, isQueryValid };
+const isFavorited = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+  const { userId }: { userId: string } = req.body;
+  const isRecipeFavorited = await User.findById(userId, {
+    savedRecipes: 1,
+    _id: 0,
+  }).exec();
+  const favoriteCheck = isRecipeFavorited.savedRecipes.find(
+    (recipe: string) => recipe === id
+  );
+  if (favoriteCheck) {
+    res.status(400).send("Recipe is already favorited.");
+    return;
+  }
+  next();
+};
+
+export { isMyRecipe, isQueryValid, isFavorited };
