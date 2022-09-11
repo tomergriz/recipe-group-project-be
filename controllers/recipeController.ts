@@ -88,4 +88,13 @@ const editRecipe = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { addRecipe, getRecipeById, editRecipe };
+const getSearchResults = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const recipes = await Recipes.find(req.query);
+    res.json(recipes);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { addRecipe, getRecipeById, editRecipe, getSearchResults };
