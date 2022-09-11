@@ -52,4 +52,40 @@ const getRecipeById = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { addRecipe, getRecipeById };
+const editRecipe = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {
+      recipeTitle,
+      description,
+      category,
+      picture,
+      ingredients,
+      directions,
+      servings,
+      totalTime,
+      difficulty,
+      userId,
+    } = req.body;
+    const currentRecipe = await Recipes.findById(req.params.id);
+    if (recipeTitle) currentRecipe.recipeTitle = recipeTitle;
+    if (description) currentRecipe.description = description;
+    if (category) currentRecipe.category = category;
+    if (picture) currentRecipe.picture = picture;
+    if (ingredients) currentRecipe.ingredients = ingredients;
+    if (directions) currentRecipe.directions = directions;
+    if (servings) currentRecipe.servings = servings;
+    if (totalTime) currentRecipe.totalTime = totalTime;
+    if (difficulty) currentRecipe.difficulty = difficulty;
+    if (userId) currentRecipe.userId = userId;
+    await currentRecipe.save();
+    res.send({
+      ok: true,
+    });
+    return;
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+};
+
+export { addRecipe, getRecipeById, editRecipe };
