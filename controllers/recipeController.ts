@@ -17,6 +17,11 @@ const addRecipe = async (req: Request, res: Response): Promise<void> => {
       userId,
     } = req.body;
 
+    const userCreatedRecipe = await User.findById(userId, {
+      fname: 1,
+      lname: 1,
+    });
+
     const addedRecipe = await Recipes.create({
       recipeTitle: recipeTitle,
       description: description,
@@ -27,7 +32,7 @@ const addRecipe = async (req: Request, res: Response): Promise<void> => {
       servings: servings,
       totalTime: totalTime,
       difficulty: difficulty,
-      createdBy: userId,
+      createdBy: `${userCreatedRecipe.fname} ${userCreatedRecipe.lname}`,
     });
     await User.findOneAndUpdate(
       { _id: userId },
@@ -169,6 +174,36 @@ const deleteSavedRecipe = async (
   }
 };
 
+const getUserRecipes = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findById(req.body.userId, {
+      savedRecipes: 1,
+      userRecipes: 1,
+
+      _id: 0,
+    }).exec();
+    const mySavedRecipes = await Recipes.find(
+      {
+        _id: { $in: user?.savedRecipes },
+      },
+      { _id: 1, recipeTitle: 1, description: 1, createdBy: 1, picture: 1 }
+    );
+    const myUserRecipes = await Recipes.find(
+      {
+        _id: { $in: user?.userRecipes },
+      },
+      { _id: 1, recipeTitle: 1, description: 1, createdBy: 1, picture: 1 }
+    );
+
+    res.json({
+      savedRecipes: mySavedRecipes,
+      userRecipes: myUserRecipes,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export {
   addRecipe,
   getRecipeById,
@@ -176,4 +211,5 @@ export {
   getSearchResults,
   addSavedRecipe,
   deleteSavedRecipe,
+  getUserRecipes,
 };
