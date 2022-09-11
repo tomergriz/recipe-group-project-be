@@ -1,12 +1,17 @@
 import { Router } from "express";
 import {
   addRecipe,
+  addSavedRecipe,
   editRecipe,
   getRecipeById,
   getSearchResults,
 } from "../controllers/recipeController";
 import { upload, uploadToCloudinary } from "../middleware/imagesMiddleware";
-import { isMyRecipe, isQueryValid } from "../middleware/recipeMiddleware";
+import {
+  isFavorited,
+  isMyRecipe,
+  isQueryValid,
+} from "../middleware/recipeMiddleware";
 import { verifyToken } from "../middleware/userMiddleware";
 
 const router = Router();
@@ -31,5 +36,7 @@ router.put(
 );
 
 router.get("/", isQueryValid, getSearchResults);
+
+router.post("/:id/save", verifyToken, isFavorited, addSavedRecipe);
 
 export default router;

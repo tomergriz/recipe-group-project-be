@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Recipes from "../models/recipeModel";
+import { User } from "../models/userModel";
 
 const addRecipe = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -28,6 +29,10 @@ const addRecipe = async (req: Request, res: Response): Promise<void> => {
       difficulty: difficulty,
       createdBy: userId,
     });
+    await User.findOneAndUpdate(
+      { _id: userId },
+      { $push: { userRecipes: addedRecipe._id } }
+    ).exec();
     res.send({
       ok: true,
     });
@@ -97,4 +102,46 @@ const getSearchResults = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { addRecipe, getRecipeById, editRecipe, getSearchResults };
+const addSavedRecipe = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const recipe = await Recipes.findById(req.params.id);
+    if (recipe) {
+      const { userId }: { userId: string } = req.body;
+      const { id } = req.params;
+      const currentUser = await User.findById(userId);
+      if (!currentUser.savedRecipes) {
+        await User.findOneAndUpdate(
+          { _id: userId },
+          { $push: { savedRecipes: id } }
+        ).exec();
+        res.send({
+          ok: true,
+        });
+      } else if (!currentUser.savedRecipes.includes(id)) {
+        await User.findOneAndUpdate(
+          { _id: userId },
+          { $push: { savedRecipes: id } }
+        ).exec();
+        res.send({
+          ok: true,
+        });
+      } else {
+        res.status(404).json({ message: "Recipe already saved" });
+        throw new Error("Recipe already saved");
+      }
+    } else {
+      res.status(404).json({ message: "Recipe not found" });
+      throw new Error("Recipe not found");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export {
+  addRecipe,
+  getRecipeById,
+  editRecipe,
+  getSearchResults,
+  addSavedRecipe,
+};
