@@ -138,10 +138,42 @@ const addSavedRecipe = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const deleteSavedRecipe = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const recipe = await Recipes.findById(req.params.id);
+    if (recipe) {
+      const { userId }: { userId: string } = req.body;
+      const { id } = req.params;
+      const currentUser = await User.findById(userId);
+      if (currentUser.savedRecipes.includes(id)) {
+        await User.findOneAndUpdate(
+          { _id: userId },
+          { $pull: { savedRecipes: id } }
+        ).exec();
+        res.send({
+          ok: true,
+        });
+      } else {
+        res.status(404).json({ message: "Recipe not found" });
+        throw new Error("Recipe not found");
+      }
+    } else {
+      res.status(404).json({ message: "Recipe not found" });
+      throw new Error("Recipe not found");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export {
   addRecipe,
   getRecipeById,
   editRecipe,
   getSearchResults,
   addSavedRecipe,
+  deleteSavedRecipe,
 };

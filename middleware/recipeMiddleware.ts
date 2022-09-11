@@ -51,4 +51,25 @@ const isFavorited = async (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export { isMyRecipe, isQueryValid, isFavorited };
+const isUnFavorited = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  const { userId }: { userId: string } = req.body;
+  const isRecipeFavorited = await User.findById(userId, {
+    savedRecipes: 1,
+    _id: 0,
+  }).exec();
+  const favoriteCheck = isRecipeFavorited.savedRecipes.find(
+    (recipe: string) => recipe === id
+  );
+  if (!favoriteCheck) {
+    res.status(400).send("Recipe is already unfavorited.");
+    return;
+  }
+  next();
+};
+
+export { isMyRecipe, isQueryValid, isFavorited, isUnFavorited };
