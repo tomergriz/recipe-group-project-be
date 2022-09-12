@@ -4,6 +4,7 @@ import {
   getUserFull,
   getUsers,
   login,
+  signout,
   signUpUser,
   updateUserInfo,
 } from "../controllers/userController";
@@ -52,5 +53,7 @@ router.put(
 router.get("/", verifyToken, isAdmin, getUsers);
 
 router.get("/:id/full", verifyToken, isAdmin, getUserFull);
+
+router.post("/signout", signout);
 
 export default router;
