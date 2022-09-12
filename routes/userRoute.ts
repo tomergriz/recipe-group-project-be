@@ -54,6 +54,6 @@ router.get("/", verifyToken, isAdmin, getUsers);
 
 router.get("/:id/full", verifyToken, isAdmin, getUserFull);
 
-router.post("/signout", signout);
+router.get("/signout", signout);
 
 export default router;
