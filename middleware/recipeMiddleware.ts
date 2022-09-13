@@ -17,7 +17,7 @@ const isQueryValid = (req: Request, res: Response, next: NextFunction) => {
   const searchObj = {};
   if (req.query.recipeTitle) {
     Object.assign(searchObj, {
-      type: { $regex: req.query.recipeTitle, $options: "i" },
+      recipeTitle: { $regex: req.query.recipeTitle, $options: "i" },
     });
   }
   if (req.query.category) {
