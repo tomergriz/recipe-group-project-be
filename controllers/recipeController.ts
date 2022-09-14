@@ -177,18 +177,12 @@ const getUserRecipes = async (req: Request, res: Response): Promise<void> => {
 
       _id: 0,
     }).exec();
-    const mySavedRecipes = await Recipes.find(
-      {
-        _id: { $in: user?.savedRecipes },
-      },
-      { _id: 1, recipeTitle: 1, description: 1, createdBy: 1, picture: 1 }
-    );
-    const myUserRecipes = await Recipes.find(
-      {
-        _id: { $in: user?.userRecipes },
-      },
-      { _id: 1, recipeTitle: 1, description: 1, createdBy: 1, picture: 1 }
-    );
+    const mySavedRecipes = await Recipes.find({
+      _id: { $in: user?.savedRecipes },
+    });
+    const myUserRecipes = await Recipes.find({
+      _id: { $in: user?.userRecipes },
+    });
 
     res.json({
       savedRecipes: mySavedRecipes,
