@@ -21,8 +21,8 @@ const router = Router();
 
 router.post(
   "/",
-  verifyToken,
   upload.single("picture"),
+  verifyToken,
   uploadToCloudinary,
   addRecipe
 );

@@ -16,23 +16,18 @@ const addRecipe = async (req: Request, res: Response): Promise<void> => {
       difficulty,
       userId,
     } = req.body;
-
-    const userCreatedRecipe = await User.findById(userId, {
-      fname: 1,
-      lname: 1,
-    });
-
+    const userCreatedRecipe = await User.findById(userId);
     const addedRecipe = await Recipes.create({
       recipeTitle: recipeTitle,
       description: description,
       category: category,
       picture: picture,
-      ingredients: ingredients,
-      directions: directions,
+      ingredients: ingredients.split(","),
+      directions: directions.split(","),
       servings: servings,
       totalTime: totalTime,
       difficulty: difficulty,
-      createdBy: `${userCreatedRecipe.fname} ${userCreatedRecipe.lname}`,
+      createdBy: `${userCreatedRecipe?.fname} ${userCreatedRecipe?.lname}`,
     });
     await User.findOneAndUpdate(
       { _id: userId },

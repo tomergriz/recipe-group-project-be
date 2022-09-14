@@ -15,18 +15,6 @@ cloudinary.config({
 
 const upload = multer({ dest: "./images" });
 
-const imageUrl = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    console.log(req.file);
-    const picture = "http://localhost:5000/" + req?.file?.path;
-    req.body.picture = picture;
-
-    next();
-  } catch (err) {
-    res.status(500).send(err);
-  }
-};
-
 const uploadToCloudinary = (
   req: Request,
   res: Response,
@@ -39,7 +27,6 @@ const uploadToCloudinary = (
       res.status(400).send("No image attached");
       return;
     }
-
     cloudinary.uploader.upload(req.file.path, (err, result) => {
       if (err) {
         res.status(500).send(err.message);
